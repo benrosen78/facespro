@@ -3,5 +3,5 @@
 */
 
 @interface UIImage (AverageColor)
-- (UIColor *)averageColor;
+- (UIColor *)facesPro_averageColor;
 @end

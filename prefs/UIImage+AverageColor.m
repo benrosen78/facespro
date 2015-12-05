@@ -31,7 +31,7 @@
 
 @implementation UIImage (AverageColor)
 
-- (UIColor *)averageColor {
+- (UIColor *)facesPro_averageColor {
 
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     unsigned char rgba[4];

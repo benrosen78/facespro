@@ -4,22 +4,6 @@
 
 @implementation BRFPRootListController
 
-UIImage *userLockscreenWallpaper() {
-    NSData *lockscreenWallpaperData = [NSData dataWithContentsOfFile:@"/var/mobile/Library/SpringBoard/LockBackground.cpbitmap"];
-    if (lockscreenWallpaperData) {
-        CFDataRef lockscreenWallpaperDataRef = CFDataCreate(NULL, lockscreenWallpaperData.bytes, lockscreenWallpaperData.length);
-        CFArrayRef CPBitmapCreateImagesFromData(CFDataRef cpbitmap, void*, int, void*);
-        CFArrayRef wallpaperArray = CPBitmapCreateImagesFromData(lockscreenWallpaperDataRef, NULL, 1, NULL);
-        CFRelease(lockscreenWallpaperDataRef);
-        if(CFArrayGetCount(wallpaperArray) > 0) {
-            CGImageRef lockscreenWallpaperRef = (CGImageRef)CFArrayGetValueAtIndex(wallpaperArray, 0);
-            return [UIImage imageWithCGImage:lockscreenWallpaperRef];
-        }
-        CFRelease(wallpaperArray);
-    }
-    return [UIImage new];
-}
-
 + (NSString *)hb_specifierPlist {
 	return @"Root";
 }
@@ -33,7 +17,8 @@ UIImage *userLockscreenWallpaper() {
 }
 
 + (UIColor *)hb_tintColor {
-	return [userLockscreenWallpaper() averageColor];
+    UIImage *wallpaper = [UIImage imageWithContentsOfCPBitmapFile:@"/var/mobile/Library/SpringBoard/LockBackground.cpbitmap" flags:kNilOptions];
+	return [wallpaper facesPro_averageColor];
 }
 
 + (BOOL)hb_invertedNavigationBar {
@@ -43,7 +28,7 @@ UIImage *userLockscreenWallpaper() {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UIImage *headerLogo = [UIImage imageNamed:@"icon" inBundle:[NSBundle bundleForClass:self.class]];
+    UIImage *headerLogo = [UIImage imageNamed:@"facesHeaderLogo" inBundle:[NSBundle bundleForClass:self.class]];
     self.navigationItem.titleView = [[[UIImageView alloc] initWithImage:headerLogo] autorelease];
     self.navigationItem.titleView.alpha = 0.0;
 

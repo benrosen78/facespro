@@ -8,15 +8,11 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>headerCellClass</key>
-			<string>HBPackageNameHeaderCell</string>
+			<string>HBImageTableCell</string>
+			<key>height</key>
+			<integer>100</integer>
 			<key>icon</key>
-			<string>icon.png</string>
-			<key>packageIdentifier</key>
-			<string>me.benrosen.facespro</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
+			<string>headerImage.png</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -25,6 +21,8 @@
 			<string>BRFPConfigurationListController</string>
 			<key>isController</key>
 			<true/>
+			<key>icon</key>
+			<string>config.png</string>
 			<key>label</key>
 			<string>Configuration</string>
 		</dict>
@@ -35,18 +33,22 @@
 			<string>BRFPAboutListController</string>
 			<key>isController</key>
 			<true/>
+			<key>icon</key>
+			<string>about.png</string>
 			<key>label</key>
 			<string>About</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
-			<key>detail</key>
-			<string>BRFPSupportListController</string>
 			<key>isController</key>
 			<true/>
+			<key>icon</key>
+			<string>support.png</string>
 			<key>label</key>
 			<string>Support</string>
+			<key>action</key>
+			<string>showSupportEmailController</string>
 		</dict>
 	</array>
 	<key>title</key>
