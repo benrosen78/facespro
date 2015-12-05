@@ -1,0 +1,5 @@
+#import <SpringBoardUIServices/SBUIPasscodeLockViewSimpleFixedDigitKeypad.h>
+
+@interface BRFPLiveConfigurationPasscodeView : SBUIPasscodeLockViewSimpleFixedDigitKeypad
+
+@end

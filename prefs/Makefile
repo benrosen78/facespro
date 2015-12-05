@@ -1,10 +1,10 @@
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = FacesPro
-FacesPro_FILES = $(wildcard *.m)
+FacesPro_FILES = $(wildcard *.m) $(wildcard *.x)
 FacesPro_INSTALL_PATH = /Library/PreferenceBundles
 FacesPro_FRAMEWORKS = UIKit
-FacesPro_PRIVATE_FRAMEWORKS = Preferences AppSupport
+FacesPro_PRIVATE_FRAMEWORKS = Preferences AppSupport SpringBoardUIServices
 FacesPro_EXTRA_FRAMEWORKS = CepheiPrefs
 
 include $(THEOS_MAKE_PATH)/bundle.mk
