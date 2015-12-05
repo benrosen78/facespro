@@ -1,0 +1,9 @@
+Package: com.cpdigitaldarkroom.benrosen.facespro
+Name: Faces Pro
+Depends: mobilesubstrate, org.thebigboss.libcolorpicker (>= 1.3)
+Version: 1.0.4
+Architecture: iphoneos-arm
+Description: Customize your passcode buttons the way you like.
+Maintainer: Ben Rosen & CP Digital Darkroom <support@quantumtweaks.com>
+Author: Ben Rosen & CP Digital Darkroom <support@quantumtweaks.com>
+Section: Tweaks

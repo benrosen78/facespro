@@ -1,0 +1,25 @@
+//Thanks to Ziph0n fo these translations
+"ALERT_CONTROLLER_TITLE" = "Vous avez sélectionné le bouton '%@'. Que voulez-vous faire avec celui-ci ?";
+"CANCEL" = "Annuler";
+"CHOOSE_IMAGES" = "Choisir images";
+"CHOOSE_PHOTO" = "Choisir une photo existante";
+"CONFIGURATION" = "Configuration";
+"CONTACT_THE_DEVELOPERS" = "Contacter les Développeurs";
+"DELETE_PHOTO" = "Supprimer les images existantes";
+"DISMISS" = "Rejeter";
+"ENABLE" = "Activer";
+"FACES_PRO" = "Faces Pro";
+"NO_IMAGE_CURRENTLY_SAVED" = "Vous n'avez pour l'instant aucune image sauvegardée pour ce bouton.";
+"MAKERS" = "Concepteurs";
+"OPACITY" = "Opacité";
+"REMOVE_BACKGROUND_TINT" = "Enlever la couleur d'arrière-plan pour les images";
+"REMOVE_CONTACT" = "Enlever les contacts";
+"RESPRING" = "Respring";
+"RESPRING_MESSAGE" = "Malheureusement, vous devez relancer le SpringBoard quand vous activez/désactivez le tweak ou quand vous changez l'opacité des images. Cela sera peut-être résolu dans une mise à jour ultérieure.";
+"SELECT_NEW_CONTACT" = "Sélectionner un nouveau contact";
+"SELECT_IMAGES_FOR_BUTTONS" = "Sélectionner les images pour les boutons";
+"SET_BACKGROUND_TINT" = "Mettre une couleur d'arrière-plan pour les images";
+"SUPPORT" = "Aide";
+"TAKE_OR_CHOOSE" = "Voulez-vous prendre une photo ou en choisir une existante ?";
+"TAKE_NEW_PHOTO" = "Prendre une nouvelle photo";
+"TAKE_PHOTO" = "Prendre une photo";
