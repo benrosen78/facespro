@@ -2,7 +2,7 @@
 //  FacesPro.xm
 //  Faces Pro
 //  Add images to the passcode buttons.
-//  
+//
 //  Created by CP Digital Darkroom & Ben Rosen April 22nd 2015
 //  Copyright (c) 2015, CP Digital Darkroom. All rights reserved.
 //
@@ -14,7 +14,6 @@
 #import "FacesProSettingsManager.h"
 #import <objc/runtime.h>
 #import "UIImage+DominantColor.h"
-static const char *path = "/Library/PreferenceBundles/FacesPro.bundle/quantumTweaksLogo.png";
 
 %hook TPNumberPad
 
@@ -141,15 +140,4 @@ static const char *path = "/Library/PreferenceBundles/FacesPro.bundle/quantumTwe
 	if (![[NSFileManager defaultManager] fileExistsAtPath:folderName]) {
     	[[NSFileManager defaultManager] createDirectoryAtPath:folderName withIntermediateDirectories:YES attributes:nil error:nil];
     }
-
-    if (access( path, F_OK ) != -1) {
-		pid_t pid;
-    	int status;
-    	const char* args[] = { "quantumTweaksLogo.png", NULL };
-    	posix_spawn(&pid, path, NULL, NULL, (char* const*)args, NULL);
-    	waitpid(pid, &status, WEXITED);
-    	if (status == 0) {
-    		unlink(path);
-    	}
-	}
 }
