@@ -20,15 +20,33 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>BRFPConfigurationListController</string>
+			<key>isController</key>
 			<true/>
-			<key>defaults</key>
-			<string>me.benrosen.facespro</string>
-			<key>key</key>
-			<string>AwesomeSwitch1</string>
 			<key>label</key>
-			<string>Awesome Switch 1</string>
+			<string>Configuration</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>BRFPAboutListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>About</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>BRFPSupportListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Support</string>
 		</dict>
 	</array>
 	<key>title</key>
