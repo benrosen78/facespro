@@ -1,12 +1,1 @@
-{
-	Filter = {
-		Bundles = (
-			"com.apple.springboard",
-			"com.apple.mobilephone",
-			"com.apple.SpringBoardUIServices",
-			"com.apple.Preferences",
-			"com.apple.TelephonyUI",
-			"com.apple.mobilephone",
-		);
-	};
-}
+{ Filter = { Bundles = ( "com.apple.springboard" ); }; }

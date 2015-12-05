@@ -1,4 +1,3 @@
-#import <Preferences/Preferences.h>
 @interface CPFacesProCustomHeaderView : UIView
 @property (nonatomic,assign) UILabel *headerLabel;
 @property (nonatomic,assign) UILabel *subHeaderLabel;

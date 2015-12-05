@@ -1,4 +1,4 @@
-#import <Preferences/Preferences.h>
+#import <Preferences/PSTableCell.h>
 #import "CPFacesProLocalizer.h"
 @interface CPFacesProDeveloperTableCell : PSTableCell
 @property (nonatomic,strong) UIImageView *devImageView;

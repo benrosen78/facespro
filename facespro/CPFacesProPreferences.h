@@ -1,4 +1,3 @@
-#import <Preferences/Preferences.h>
 #import <MessageUI/MessageUI.h>
 #import <Social/Social.h>
 #import <Twitter/TWTweetComposeViewController.h>
@@ -80,8 +79,8 @@ static NSString *const kFacesPreferencesImageOpacity = @"imageOpacity";
 + (id)sharedInstance;
 @end
 
-@interface SBUIPasscodeLockNumberPad 
-@property (nonatomic,readonly) NSArray * buttons; 
+@interface SBUIPasscodeLockNumberPad
+@property (nonatomic,readonly) NSArray * buttons;
 @end
 
 @interface SBUIPasscodeLockViewSimple4DigitKeypad : UIView

@@ -1,5 +1,3 @@
-#import <Preferences/Preferences.h>
-#import <Preferences/PSSpecifier.h>
 @interface CPFacesProLocalizer : NSObject
 @property (nonatomic,strong, readonly) NSBundle *localizationBundle;
 +(instancetype)sharedLocalizer;
