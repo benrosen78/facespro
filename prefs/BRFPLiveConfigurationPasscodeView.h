@@ -1,5 +1,5 @@
 #import <SpringBoardUIServices/SBUIPasscodeLockViewSimpleFixedDigitKeypad.h>
 
-@interface BRFPLiveConfigurationPasscodeView : SBUIPasscodeLockViewSimpleFixedDigitKeypad
+@interface BRFPLiveConfigurationPasscodeView : SBUIPasscodeLockViewSimpleFixedDigitKeypad <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @end

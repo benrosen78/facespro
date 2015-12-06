@@ -28,7 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UIImage *headerLogo = [UIImage imageNamed:@"facesHeaderLogo" inBundle:[NSBundle bundleForClass:self.class]]; self.navigationItem.titleView = [[[UIImageView alloc] initWithImage:headerLogo] autorelease];
+    UIImage *headerLogo = [UIImage imageNamed:@"facesHeaderLogo" inBundle:[NSBundle bundleForClass:self.class]];
+    self.navigationItem.titleView = [[[UIImageView alloc] initWithImage:headerLogo] autorelease];
     self.navigationItem.titleView.alpha = 0.0;
 
     [self performSelector:@selector(animateIconAlpha) withObject:nil afterDelay:0.5];
