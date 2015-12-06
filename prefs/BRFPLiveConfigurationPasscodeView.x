@@ -27,15 +27,13 @@
 
 	if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"/var/mobile/Library/Faces/picture%@.png", [passcodeButton stringCharacter]]]) {
 		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Delete current photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-			//[self passcodeButtonShouldDeleteImage:arg2];
+			[self passcodeButtonShouldDeleteImage];
 		}]];
 	}
 
 	[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
 
 	[[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:optionsAlert animated:YES completion:nil];
-
-	[optionsAlert release];
 }
 
 #pragma mark image modification
@@ -47,6 +45,11 @@
 	imagePicker.delegate = self;
 
 	[[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:imagePicker animated:YES completion:nil];
+}
+
+- (void)passcodeButtonShouldDeleteImage {
+    [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"/var/mobile/Library/Faces/picture%@.png", [_selectedButton stringCharacter]] error:nil];
+    [self putImageOnSelectedButton:[[UIImage alloc] init]];
 }
 
 - (void)putImageOnSelectedButton:(UIImage *)image {
@@ -77,6 +80,14 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark memory management
+
+- (void)dealloc {
+	[super dealloc];
+
+	[_selectedButton release];
 }
 
 @end

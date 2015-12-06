@@ -166,8 +166,14 @@
     notify_post("com.cpdigitaldarkroom.benrosen.facespro/settingschanged");
 }
 
-- (void)passcodeButtonShouldDeleteImage:(SBPasscodeNumberPadButton *)button {
-    _selectedNumberPadButton = button;
+- (void)passcodeButtonShouldDeleteImage {
+    [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"/var/mobile/Library/Faces/picture%@.png", [button stringCharacter]] error:nil];
+    [UIView animateWithDuration:1.5 animations:^ {
+        [self putImageOnSelectedButton:nil];
+    }];
+}
+
+- (void)passcodeButtonShouldDeleteImage {
     [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"/var/mobile/Library/Faces/picture%@.png", [button stringCharacter]] error:nil];
     [UIView animateWithDuration:1.5 animations:^ {
         [self putImageOnSelectedButton:nil];
