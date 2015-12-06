@@ -31,6 +31,18 @@
 	UIAlertController *optionsAlert = [UIAlertController alertControllerWithTitle:@"Faces Pro" message:[NSString stringWithFormat:@"You selected button %@. What would you like to do to this button?", passcodeButton.stringCharacter] preferredStyle:UIAlertControllerStyleActionSheet];
 	optionsAlert.popoverPresentationController.sourceView = passcodeButton;
 
+	[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Set an individual background tint color" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		[optionsAlert dismissViewControllerAnimated:YES completion:nil];
+		[self setIndividualButtonTint];
+	}]];
+
+	if (_preferences[[_selectedButton stringCharacter]][@"Tint"]) {
+		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Remove individual background tint color" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+			[optionsAlert dismissViewControllerAnimated:YES completion:nil];
+			[self removeIndividualButtonTint];
+		}]];
+	}
+
 	[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Take a new Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		[self setNewImageWithNewPhoto:YES];
 	}]];
@@ -61,7 +73,7 @@
 		[alert displayWithCompletion:^(UIColor *pickedColor){
 			[optionsAlert release];
 			NSString *hexString = [UIColor hexFromColor:pickedColor];
-			[_preferences setObject:hexString forKey:@"Tint"];
+			_preferences[@"Tint"] = hexString;
 
 			[self setAllButtonsBackgroundColorToColor:pickedColor];
 			notify_post("me.benrosen.facespro/ReloadPrefs");
@@ -71,10 +83,10 @@
 	if (tint) {
 		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Remove background tint color for images" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 			[_preferences removeObjectForKey:@"Tint"];
-		    [UIView animateWithDuration:2 animations:^{
-		        [self setAllButtonsBackgroundColorToColor:[UIColor clearColor]];
-		        notify_post("me.benrosen.facespro/ReloadPrefs");
-		    }];
+			[UIView animateWithDuration:2 animations:^{
+				[self setAllButtonsBackgroundColorToColor:[UIColor clearColor]];
+				notify_post("me.benrosen.facespro/ReloadPrefs");
+			}];
 		}]];
 	}
 
@@ -87,29 +99,60 @@
 
 - (void)setAlphaValue:(CGFloat)alpha {
 	for (SBPasscodeNumberPadButton *button in self._numberPad.buttons) {
-        if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)]) {
-            UIImageView *imageView = (UIImageView *)[button.revealingRingView viewWithTag:FACES_BUTTON_TAG];
-            imageView.alpha = alpha;
-        }
+		if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)]) {
+			UIImageView *imageView = (UIImageView *)[button.revealingRingView viewWithTag:FACES_BUTTON_TAG];
+			imageView.alpha = alpha;
+		}
 	}
-	[_preferences setFloat:alpha forKey:@"Alpha"];
+	_preferences[@"Alpha"] = @(alpha);
+	notify_post("me.benrosen.facespro/ReloadPrefs");
 }
 
 - (CGFloat)currentAlphaValue {
-	return [_preferences floatForKey:@"Alpha"];
+	return [_preferences[@"Alpha"] floatValue];
 }
 
 #pragma mark - color modification
 
+- (void)setIndividualButtonTint {
+	NSString *tint = _preferences[[_selectedButton stringCharacter]][@"Tint"];
+	UIColor *startColor = LCPParseColorString(tint, @"#000000");
+	PFColorAlert *alert = [PFColorAlert colorAlertWithStartColor:startColor showAlpha:NO];
+	[alert displayWithCompletion:^(UIColor *pickedColor){
+		NSString *hexString = [UIColor hexFromColor:pickedColor];
+		if (!_preferences[[_selectedButton stringCharacter]][@"Tint"]) {
+			_preferences[[_selectedButton stringCharacter]] = @{@"Tint": hexString};
+		} else {
+			_preferences[[_selectedButton stringCharacter]][@"Tint"] = hexString;
+		}
+		notify_post("me.benrosen.facespro/ReloadPrefs");
+		[UIView animateWithDuration:2 animations:^{
+			[self setButton:_selectedButton toIndividualColor:pickedColor];
+		}];
+	}];
+}
+
+- (void)removeIndividualButtonTint {
+	[_preferences[[_selectedButton stringCharacter]] removeObjectForKey:@"Tint"];
+	[UIView animateWithDuration:2 animations:^{
+		[self setButton:_selectedButton toIndividualColor:[UIColor clearColor]];
+	}];
+	notify_post("me.benrosen.facespro/ReloadPrefs");
+}
+
 - (void)setAllButtonsBackgroundColorToColor:(UIColor *)color {
 	[UIView animateWithDuration:2 animations:^{
 		for (SBPasscodeNumberPadButton *button in self._numberPad.buttons) {
-			if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)]) {
-				UIView *colorView = [button.revealingRingView viewWithTag:FACES_COLOR_TAG];
-				colorView.backgroundColor = color;
+			if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)] && !_preferences[[button stringCharacter]][@"Tint"]) {
+				[self setButton:button toIndividualColor:color];
 			}
 		}
 	}];
+}
+
+- (void)setButton:(SBPasscodeNumberPadButton *)button toIndividualColor:(UIColor *)color {
+	UIView *colorView = [button viewWithTag:FACES_COLOR_TAG];
+	colorView.backgroundColor = color;
 }
 
 #pragma mark - image modification
@@ -138,7 +181,7 @@
 		pictureImageView.alpha = 0.0;
 		pictureImageView.image = image;
 		pictureImageView.alpha = imageAlpha;
-	    pictureImageView.layer.borderColor = averageColor.CGColor ? : [UIColor clearColor].CGColor;
+		pictureImageView.layer.borderColor = averageColor.CGColor ? : [UIColor clearColor].CGColor;
 	}];
 }
 

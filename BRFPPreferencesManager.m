@@ -33,14 +33,10 @@ static NSString *const kBRFPAlphaKey = @"Alpha";
 }
 
 - (UIColor *)colorForPasscodeButtonString:(NSString *)string {
-	/*if ([_preferences objectForKey:[sting]@"tint"]) {
-		return LCPParseColorString(self.settings[stringCharacter][@"tint"], @"#000000");
+	NSString *potentialIndividualTint = _preferences[string][@"Tint"];
+	if (potentialIndividualTint) {
+		return LCPParseColorString(potentialIndividualTint, @"#000000");
 	}
-	if (self.settings[stringCharacter][@"tint"]) {
-	    return LCPParseColorString(self.settings[stringCharacter][@"tint"], @"#000000");
-	}*/
-
-	HBLogDebug(@"The string is %@", _hexForAllButtons);
 	return _hexForAllButtons ? LCPParseColorString(_hexForAllButtons, @"#000000") : [UIColor clearColor];
 }
 
