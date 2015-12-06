@@ -21,6 +21,8 @@
 - (instancetype)initWithLightStyle:(BOOL)lightStyle {
 	if (self = [super initWithLightStyle:lightStyle]) {
 		_preferences = [[HBPreferences alloc] initWithIdentifier:@"me.benrosen.facespro"];
+
+		[self updateToShowHideButtonState];
 	}
 	return self;
 }
@@ -67,6 +69,13 @@
 - (void)ellipsisPressed:(UIBarButtonItem *)item {
 	NSString *tint = [_preferences objectForKey:@"Tint"];
 	UIAlertController *optionsAlert = [UIAlertController alertControllerWithTitle:@"Faces Pro" message:@"What you like to do to all of the buttons?" preferredStyle:UIAlertControllerStyleActionSheet];
+
+	[optionsAlert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%@ passcode numbers and letters", [_preferences[@"HidePasscodeButtons"] boolValue] ? @"Show" : @"Hide"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		_preferences[@"HidePasscodeButtons"] = @(![_preferences[@"HidePasscodeButtons"] boolValue]);
+		notify_post("me.benrosen.facespro/ReloadPrefs");
+		[self updateToShowHideButtonState];
+	}]];
+
 	[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Set a background tint color images" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		UIColor *startColor = LCPParseColorString(tint, @"#000000");
 		PFColorAlert *alert = [PFColorAlert colorAlertWithStartColor:startColor showAlpha:NO];
@@ -110,6 +119,17 @@
 
 - (CGFloat)currentAlphaValue {
 	return [_preferences[@"Alpha"] floatValue];
+}
+
+#pragma mark - hide/show button numbers and letters
+
+- (void)updateToShowHideButtonState {
+	for (SBPasscodeNumberPadButton *button in self._numberPad.buttons) {
+		if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)]) {
+			button.glyphLayer.contents = [(__bridge id)[SBPasscodeNumberPadButton imageForCharacter:button.character highlighted:NO whiteVersion:YES].CGImage retain];
+			button.highlightedGlyphLayer.contents = [(__bridge id)[SBPasscodeNumberPadButton imageForCharacter:button.character highlighted:YES whiteVersion:YES].CGImage retain];
+		}
+	}
 }
 
 #pragma mark - color modification

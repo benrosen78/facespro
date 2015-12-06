@@ -4,6 +4,8 @@
 
 @property (nonatomic, readonly) BOOL enabled;
 
+@property (nonatomic, readonly) BOOL hidePasscodeNumbersAndLetters;
+
 @property (nonatomic, readonly) CGFloat alpha;
 
 + (instancetype)sharedInstance;

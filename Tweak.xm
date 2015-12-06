@@ -57,6 +57,24 @@
 	return self;
 }
 
+%end
+
+%hook SBPasscodeNumberPadButton
+
++ (UIImage *)imageForCharacter:(unsigned)character highlighted:(BOOL)highlighted whiteVersion:(BOOL)whiteVersion {
+	return [BRFPPreferencesManager sharedInstance].hidePasscodeNumbersAndLetters ? nil : %orig;
+}
+
++ (UIImage *)imageForCharacter:(unsigned)character highlighted:(BOOL)highlighted {
+    return [BRFPPreferencesManager sharedInstance].hidePasscodeNumbersAndLetters ? nil : %orig;
+}
+
++ (UIImage *)imageForCharacter:(unsigned)character {
+	return [BRFPPreferencesManager sharedInstance].hidePasscodeNumbersAndLetters ? nil : %orig;
+}
+
+%end
+
 /*
 %new
 
@@ -74,7 +92,6 @@
 	}
 }
 */
-%end
 
 // epicentre
 /*

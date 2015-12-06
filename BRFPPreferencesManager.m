@@ -5,6 +5,7 @@
 static NSString *const kBRFPEnabledKey = @"Enabled";
 static NSString *const kBRFPTintAllKey = @"Tint";
 static NSString *const kBRFPAlphaKey = @"Alpha";
+static NSString *const kBRFPHidePasscodeButtonsKey = @"HidePasscodeButtons";
 
 @implementation BRFPPreferencesManager {
 	HBPreferences *_preferences;
@@ -26,6 +27,7 @@ static NSString *const kBRFPAlphaKey = @"Alpha";
 		_preferences = [[HBPreferences alloc] initWithIdentifier:@"me.benrosen.facespro"];
 
 		[_preferences registerBool:&_enabled default:YES forKey:kBRFPEnabledKey];
+		[_preferences registerBool:&_hidePasscodeNumbersAndLetters default:NO forKey:kBRFPHidePasscodeButtonsKey];
 		[_preferences registerObject:&_hexForAllButtons default:nil forKey:kBRFPTintAllKey];
 		[_preferences registerFloat:&_alpha default:0.5f forKey:kBRFPAlphaKey];
 	}
