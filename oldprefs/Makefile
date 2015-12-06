@@ -5,9 +5,9 @@ include theos/makefiles/common.mk
 BUNDLE_NAME = FacesPro
 FacesPro_FILES = $(wildcard *.m) $(wildcard *.x) $(wildcard JVAlertController/*.m)
 FacesPro_INSTALL_PATH = /Library/PreferenceBundles
-FacesPro_EXTRA_FRAMEWORKS =
+FacesPro_EXTRA_FRAMEWORKS = Cephei
 FacesPro_PRIVATE_FRAMEWORKS = Preferences AppSupport SpringBoardUIServices
-FacesPro_LIBRARIES = MobileGestalt substrate colorpicker
+FacesPro_LIBRARIES = MobileGestalt colorpicker
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 include $(THEOS_MAKE_PATH)/tweak.mk

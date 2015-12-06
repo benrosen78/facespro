@@ -38,6 +38,8 @@
     _lockScreenKeypad.backgroundAlpha = 0.0;
     [self.table addSubview:_lockScreenKeypad];
 
+    UIImage *ellipsisImage = [UIImage imageNamed:@"ell" inBundle:[NSBundle bundleForClass:self.class]];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:ellipsisImage style:UIBarButtonItemStylePlain target:_lockScreenKeypad action:@selector(ellipsisPressed:)];
 }
 
 - (void)viewDidLayoutSubviews {

@@ -5,7 +5,8 @@ FacesPro_FILES = $(wildcard *.m) $(wildcard *.x)
 FacesPro_INSTALL_PATH = /Library/PreferenceBundles
 FacesPro_FRAMEWORKS = UIKit
 FacesPro_PRIVATE_FRAMEWORKS = Preferences AppSupport SpringBoardUIServices
-FacesPro_EXTRA_FRAMEWORKS = CepheiPrefs
+FacesPro_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
+FacesPro_LIBRARIES = MobileGestalt colorpicker
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
