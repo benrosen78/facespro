@@ -73,6 +73,7 @@
 			[_preferences removeObjectForKey:@"Tint"];
 		    [UIView animateWithDuration:2 animations:^{
 		        [self setAllButtonsBackgroundColorToColor:[UIColor clearColor]];
+		        notify_post("me.benrosen.facespro/ReloadPrefs");
 		    }];
 		}]];
 	}

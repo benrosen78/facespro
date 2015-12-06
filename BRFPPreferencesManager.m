@@ -39,6 +39,8 @@ static NSString *const kBRFPAlphaKey = @"Alpha";
 	if (self.settings[stringCharacter][@"tint"]) {
 	    return LCPParseColorString(self.settings[stringCharacter][@"tint"], @"#000000");
 	}*/
+
+	HBLogDebug(@"The string is %@", _hexForAllButtons);
 	return _hexForAllButtons ? LCPParseColorString(_hexForAllButtons, @"#000000") : [UIColor clearColor];
 }
 
