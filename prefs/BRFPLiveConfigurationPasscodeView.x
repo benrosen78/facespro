@@ -5,6 +5,8 @@
 #import <libcolorpicker.h>
 #import <Preferences/PreferencesAppController.h>
 #import <PreferencesUI/PSUIPrefsRootController.h>
+#include <notify.h>
+#import "UIImage+AverageColor.h"
 
 #define FACES_BUTTON_TAG 19828
 #define FACES_COLOR_TAG 19829
@@ -14,7 +16,7 @@
 	HBPreferences *_preferences;
 }
 
-#pragma mark BRFPLiveConfigurationPasscodeView
+#pragma mark - BRFPLiveConfigurationPasscodeView
 
 - (instancetype)initWithLightStyle:(BOOL)lightStyle {
 	if (self = [super initWithLightStyle:lightStyle]) {
@@ -48,10 +50,10 @@
 	[((PreferencesAppController *)[UIApplication sharedApplication]).rootController presentViewController:optionsAlert animated:YES completion:nil];
 }
 
-#pragma mark ellipsis
+#pragma mark - ellipsis
 
 - (void)ellipsisPressed:(UIBarButtonItem *)item {
-	NSString *tint = [_preferences objectForKey:@"tint"];
+	NSString *tint = [_preferences objectForKey:@"Tint"];
 	UIAlertController *optionsAlert = [UIAlertController alertControllerWithTitle:@"Faces Pro" message:@"What you like to do to all of the buttons?" preferredStyle:UIAlertControllerStyleActionSheet];
 	[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Set a background tint color images" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		UIColor *startColor = LCPParseColorString(tint, @"#000000");
@@ -59,15 +61,16 @@
 		[alert displayWithCompletion:^(UIColor *pickedColor){
 			[optionsAlert release];
 			NSString *hexString = [UIColor hexFromColor:pickedColor];
-			[_preferences setObject:hexString forKey:@"tint"];
+			[_preferences setObject:hexString forKey:@"Tint"];
 
 			[self setAllButtonsBackgroundColorToColor:pickedColor];
+			notify_post("me.benrosen.facespro/ReloadPrefs");
 		}];
 	}]];
 
 	if (tint) {
 		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Remove background tint color for images" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-			[_preferences removeObjectForKey:@"tint"];
+			[_preferences removeObjectForKey:@"Tint"];
 		    [UIView animateWithDuration:2 animations:^{
 		        [self setAllButtonsBackgroundColorToColor:[UIColor clearColor]];
 		    }];
@@ -79,7 +82,23 @@
 	[((PreferencesAppController *)[UIApplication sharedApplication]).rootController presentViewController:optionsAlert animated:YES completion:nil];
 }
 
-#pragma mark color modification
+#pragma mark - alpha getters/setters
+
+- (void)setAlphaValue:(CGFloat)alpha {
+	for (SBPasscodeNumberPadButton *button in self._numberPad.buttons) {
+        if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)]) {
+            UIImageView *imageView = (UIImageView *)[button.revealingRingView viewWithTag:FACES_BUTTON_TAG];
+            imageView.alpha = alpha;
+        }
+	}
+	[_preferences setFloat:alpha forKey:@"Alpha"];
+}
+
+- (CGFloat)currentAlphaValue {
+	return [_preferences floatForKey:@"Alpha"];
+}
+
+#pragma mark - color modification
 
 - (void)setAllButtonsBackgroundColorToColor:(UIColor *)color {
 	[UIView animateWithDuration:2 animations:^{
@@ -92,7 +111,7 @@
 	}];
 }
 
-#pragma mark image modification
+#pragma mark - image modification
 
 - (void)setNewImageWithNewPhoto:(BOOL)newPhoto {
 	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
@@ -112,17 +131,17 @@
 	TPRevealingRingView *ringView = _selectedButton.revealingRingView;
 	UIImageView *pictureImageView = (UIImageView *)[ringView viewWithTag:FACES_BUTTON_TAG];
 	CGFloat imageAlpha = pictureImageView.alpha;
-	//UIColor *averageColor = [image dominantColor];
+	UIColor *averageColor = [image facesPro_averageColor];
 
 	[UIView animateWithDuration:2 animations:^{
 		pictureImageView.alpha = 0.0;
 		pictureImageView.image = image;
 		pictureImageView.alpha = imageAlpha;
-	   // pictureImageView.layer.borderColor = averageColor.CGColor ? : [UIColor clearColor].CGColor;
+	    pictureImageView.layer.borderColor = averageColor.CGColor ? : [UIColor clearColor].CGColor;
 	}];
 }
 
-#pragma mark image picker controller delegate
+#pragma mark - image picker controller delegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	UIImage *picture = info[UIImagePickerControllerEditedImage];
@@ -138,7 +157,7 @@
 	[picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark memory management
+#pragma mark - memory management
 
 - (void)dealloc {
 	[super dealloc];

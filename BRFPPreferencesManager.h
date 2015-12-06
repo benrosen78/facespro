@@ -1,13 +1,13 @@
 #import <Cephei/HBPreferences.h>
 
-static NSString *const kBRFPEnabledKey = @"Enabled";
-
 @interface BRFPPreferencesManager : NSObject
 
-@property (readonly) BOOL enabled;
+@property (nonatomic, readonly) BOOL enabled;
+
+@property (nonatomic, readonly) CGFloat alpha;
 
 + (instancetype)sharedInstance;
 
-- (void)listenForPreferenceChangeWithCallback:(HBPreferencesValueChangeCallback)callback forKey:(NSString *)key;
+- (UIColor *)colorForPasscodeButtonString:(NSString *)string;
 
 @end

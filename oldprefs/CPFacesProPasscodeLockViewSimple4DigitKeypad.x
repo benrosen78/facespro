@@ -222,11 +222,11 @@
     notify_post("com.cpdigitaldarkroom.benrosen.facespro/settingschanged");
 }
 
-- (void)setAllButtonsToAlpha:(CGFloat)alpha {
+- (void)setAllButtonsToAlpha:(UISlider *)slider {
     for (SBPasscodeNumberPadButton *button in self._numberPad.buttons) {
         if ([button isKindOfClass:objc_getClass("SBPasscodeNumberPadButton")]) {
             UIImageView *imageView = (UIImageView *)[button.revealingRingView viewWithTag:FACES_BUTTON_TAG];
-            imageView.alpha = alpha;
+            imageView.alpha = slider.value;
         }
     }
 }

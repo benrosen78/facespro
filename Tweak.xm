@@ -13,15 +13,14 @@
 #import "FacesPro.h"
 #import "BRFPPreferencesManager.h"
 #import <objc/runtime.h>
+#import "UIImage+AverageColor.h"
 
 %hook TPNumberPad
 
 - (id)initWithButtons:(NSArray *)passcodeButtons {
-	if (self == %orig && [BRFPPreferencesManager sharedInstance].enabled) {
-		// for preference updating
-
+	if ((self = %orig) && [BRFPPreferencesManager sharedInstance].enabled) {
 		for (SBPasscodeNumberPadButton *numberButton in passcodeButtons) {
-			if (numberButton && [numberButton isKindOfClass:[objc_getClass("SBPasscodeNumberPadButton") class]] && [[numberButton class] instancesRespondToSelector:@selector(revealingRingView)]) {
+			if (numberButton && [numberButton isKindOfClass:%c(SBPasscodeNumberPadButton)] && [numberButton respondsToSelector:@selector(revealingRingView)]) {
 				TPRevealingRingView *ringView = numberButton.revealingRingView;
 				CGRect frameForButtons = CGRectMake(ringView.paddingOutsideRing.left, ringView.paddingOutsideRing.top, ringView.ringSize.width, ringView.ringSize.height);
 				UIImage *imageForButton = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Faces/picture%@.png", [numberButton stringCharacter]]];
@@ -32,14 +31,18 @@
 				colorView.alpha = 0.5;
 				colorView.layer.cornerRadius = colorView.frame.size.height / 2;
 				colorView.layer.masksToBounds = YES;
-				//colorView.backgroundColor = [[FacesProSettingsManager sharedManager] tintBackgroundColorForButtonString:[numberButton stringCharacter]];
+				colorView.backgroundColor = [[BRFPPreferencesManager sharedInstance] colorForPasscodeButtonString:[numberButton stringCharacter]];
 				[ringView addSubview:colorView];
 				[colorView release];
 
 				UIImageView *imageView = [[UIImageView alloc] init];
 				imageView.frame = frameForButtons;
 				imageView.layer.cornerRadius = imageView.frame.size.height / 2;
-				//imageView.alpha = [[FacesProSettingsManager sharedManager] alpha];
+				imageView.alpha = [BRFPPreferencesManager sharedInstance].alpha;
+
+				UIColor *averageColor = [imageForButton facesPro_averageColor];
+				imageView.layer.borderColor = averageColor.CGColor ? : [UIColor clearColor].CGColor;
+				imageView.layer.borderWidth = 1.5f;
 				imageView.tag = FACES_BUTTON_TAG;
 				imageView.image = imageForButton;
 				imageView.layer.masksToBounds = YES;

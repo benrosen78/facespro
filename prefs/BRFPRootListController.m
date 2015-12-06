@@ -1,5 +1,5 @@
 #include "BRFPRootListController.h"
-#import "UIImage+AverageColor.h"
+#import "../UIImage+AverageColor.h"
 #import <UIKit/UIImage+Private.h>
 
 @implementation BRFPRootListController

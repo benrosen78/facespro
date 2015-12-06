@@ -17,14 +17,6 @@
     [super viewDidLoad];
     self.table.scrollEnabled = NO;
 
-    UISlider *slider = [[UISlider alloc] init];
-    slider.minimumValue = 0.0;
-    slider.maximumValue = 1.0;
-    //slider.value = [self currentAlphaValue];
-
-    //[slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventAllTouchEvents];
-    self.navigationItem.titleView = slider;
-
     _backgroundImageView = [[UIImageView alloc] init];
     _backgroundImageView.image = [UIImage imageWithContentsOfCPBitmapFile:@"/var/mobile/Library/SpringBoard/LockBackground.cpbitmap" flags:kNilOptions];
     [self.table addSubview:_backgroundImageView];
@@ -38,8 +30,20 @@
     _lockScreenKeypad.backgroundAlpha = 0.0;
     [self.table addSubview:_lockScreenKeypad];
 
+    UISlider *slider = [[UISlider alloc] init];
+    slider.minimumValue = 0.0;
+    slider.maximumValue = 1.0;
+    slider.value = [_lockScreenKeypad currentAlphaValue];
+
+    [slider addTarget:self action:@selector(setAlphaValue:) forControlEvents:UIControlEventValueChanged];
+    self.navigationItem.titleView = slider;
+
     UIImage *ellipsisImage = [UIImage imageNamed:@"ell" inBundle:[NSBundle bundleForClass:self.class]];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:ellipsisImage style:UIBarButtonItemStylePlain target:_lockScreenKeypad action:@selector(ellipsisPressed:)];
+}
+
+- (void)setAlphaValue:(UISlider *)slider {
+    [_lockScreenKeypad setAlphaValue:slider.value];
 }
 
 - (void)viewDidLayoutSubviews {
