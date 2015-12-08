@@ -1,9 +1,5 @@
 # Faces Pro
-Ben Rosen, CPDigitalDarkroom, Veerklempt
-
-Free. Open Source. Made with love.
-
-Initially this tweak was paid, but I decided to change that. The free version has been submitted, and will be out soon.
+Ben Rosen. CPDigitalDarkroom. Veerklempt. Free. Open Source. Made with love.
 
 Faces Pro takes an already established method of adding pictures to your password lock buttons and simplifies the process further while also adding much needed compatibility for other passcode tweaks and features.
 
