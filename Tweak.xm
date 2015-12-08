@@ -1,19 +1,11 @@
-//
-//  FacesPro.xm
-//  Faces Pro
-//  Add images to the passcode buttons.
-//
-//  Created by CP Digital Darkroom & Ben Rosen April 22nd 2015
-//  Copyright (c) 2015, CP Digital Darkroom. All rights reserved.
-//
-
-#include <notify.h>
-#include <spawn.h>
-#include <unistd.h>
-#import "FacesPro.h"
 #import "BRFPPreferencesManager.h"
-#import <objc/runtime.h>
 #import "UIImage+AverageColor.h"
+#import <SpringBoardUIServices/SBPasscodeNumberPadButton.h>
+#import <TelephonyUI/TPRevealingRingView.h>
+#import <TelephonyUI/TPNumberPad.h>
+
+#define FACES_BUTTON_TAG 19828
+#define FACES_COLOR_TAG 19829
 
 %hook TPNumberPad
 
