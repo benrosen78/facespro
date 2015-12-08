@@ -38,7 +38,7 @@
 		[self setIndividualButtonTint];
 	}]];
 
-	if (_preferences[[_selectedButton stringCharacter]][@"Tint"]) {
+	if (_preferences[buttonKey][@"Tint"]) {
 		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Remove individual background tint color" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 			[optionsAlert dismissViewControllerAnimated:YES completion:nil];
 			[self removeIndividualButtonTint];
@@ -67,7 +67,7 @@
 #pragma mark - ellipsis
 
 - (void)ellipsisPressed:(UIBarButtonItem *)item {
-	NSString *tint = [_preferences objectForKey:@"Tint"];
+	NSString *tint = _preferences[@"Tint"];
 	UIAlertController *optionsAlert = [UIAlertController alertControllerWithTitle:@"Faces Pro" message:@"What you like to do to all of the buttons?" preferredStyle:UIAlertControllerStyleActionSheet];
 
 	[optionsAlert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%@ passcode numbers and letters", [_preferences[@"HidePasscodeButtons"] boolValue] ? @"Show" : @"Hide"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -135,16 +135,16 @@
 #pragma mark - color modification
 
 - (void)setIndividualButtonTint {
-	NSString *tint = _preferences[[_selectedButton stringCharacter]][@"Tint"];
+	NSString *buttonKey = [@"Button-" stringByAppendingString:[_selectedButton stringCharacter]];
+	NSString *tint = _preferences[buttonKey][@"Tint"];
 	UIColor *startColor = LCPParseColorString(tint, @"#000000");
 	PFColorAlert *alert = [PFColorAlert colorAlertWithStartColor:startColor showAlpha:NO];
 	[alert displayWithCompletion:^(UIColor *pickedColor){
 		NSString *hexString = [UIColor hexFromColor:pickedColor];
-		if (!_preferences[[_selectedButton stringCharacter]][@"Tint"]) {
-			_preferences[[_selectedButton stringCharacter]] = @{@"Tint": hexString};
-		} else {
-			_preferences[[_selectedButton stringCharacter]][@"Tint"] = hexString;
-		}
+		NSMutableDictionary *selectedNumberCopy = [_preferences[buttonKey] mutableCopy] ?: [NSMutableDictionary dictionary];
+		selectedNumberCopy[@"Tint"] = hexString;
+		_preferences[buttonKey] = selectedNumberCopy;
+		[selectedNumberCopy release];
 		notify_post("me.benrosen.facespro/ReloadPrefs");
 		[UIView animateWithDuration:2 animations:^{
 			[self setButton:_selectedButton toIndividualColor:pickedColor];
@@ -153,8 +153,19 @@
 }
 
 - (void)removeIndividualButtonTint {
-	[_preferences[[_selectedButton stringCharacter]] removeObjectForKey:@"Tint"];
+	NSString *buttonKey = [@"Button-" stringByAppendingString:[_selectedButton stringCharacter]];
+	NSMutableDictionary *selectedNumberCopy = [_preferences[buttonKey] mutableCopy];
+	[selectedNumberCopy removeObjectForKey:@"Tint"];
+	_preferences[buttonKey] = selectedNumberCopy;
+	[selectedNumberCopy release];
+
 	[UIView animateWithDuration:2 animations:^{
+		if (_preferences[@"Tint"]) {
+			NSString *tint = _preferences[@"Tint"];
+			UIColor *startColor = LCPParseColorString(tint, @"#000000");
+			[self setButton:_selectedButton toIndividualColor:startColor];
+			return;
+		}
 		[self setButton:_selectedButton toIndividualColor:[UIColor clearColor]];
 	}];
 	notify_post("me.benrosen.facespro/ReloadPrefs");
@@ -163,7 +174,8 @@
 - (void)setAllButtonsBackgroundColorToColor:(UIColor *)color {
 	[UIView animateWithDuration:2 animations:^{
 		for (SBPasscodeNumberPadButton *button in self._numberPad.buttons) {
-			if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)] && !_preferences[[button stringCharacter]][@"Tint"]) {
+			NSString *buttonKey = [@"Button-" stringByAppendingString:[button stringCharacter]];
+			if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)] && !_preferences[buttonKey][@"Tint"]) {
 				[self setButton:button toIndividualColor:color];
 			}
 		}
@@ -183,7 +195,7 @@
 	imagePicker.allowsEditing = YES;
 	imagePicker.delegate = self;
 
-	[[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:imagePicker animated:YES completion:nil];
+	[((PreferencesAppController *)[UIApplication sharedApplication]).rootController presentViewController:imagePicker animated:YES completion:nil];
 }
 
 - (void)passcodeButtonShouldDeleteImage {
