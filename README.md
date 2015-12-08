@@ -9,6 +9,8 @@ We've retained all previous features as well as adding a new option to tint the 
 
 We've put a ton of work into this tweak and we hope you love it!
 
+This package depends on [Cephei 1.6](https://github.com/hbang/libcephei). This will be on BigBoss soon, but until then this can be compiled and installed on your device with [kirb/theos](https://github.com/kirb/theos).
+
 # Functionality
 
 Faces Pro is the easiest way to customize your passcode buttons. You can add images, colors, and you can speed dial. This is all configurable from an amazingly built live customization view, which is available from settings. Make your lock screen personal to you.
