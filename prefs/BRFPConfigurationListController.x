@@ -24,7 +24,7 @@
     _backgroundBlurView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
     [self.table addSubview:_backgroundBlurView];
 
-    dlopen("/Library/MobileSubstrate/DynamicLibraries/AFacesPro.dylib", RTLD_NOW);
+    dlopen("/Library/MobileSubstrate/DynamicLibraries/FacesPro.dylib", RTLD_NOW);
     _lockScreenKeypad = [[%c(BRFPLiveConfigurationPasscodeView) alloc] initWithLightStyle:NO];
     _lockScreenKeypad.backgroundColor = [UIColor clearColor];
     _lockScreenKeypad.backgroundAlpha = 0.0;
