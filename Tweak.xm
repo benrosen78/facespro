@@ -19,10 +19,15 @@
 
 - (id)initWithButtons:(NSArray *)passcodeButtons {
 	if ((self = %orig) && [BRFPPreferencesManager sharedInstance].enabled) {
+		if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
+			UILongPressGestureRecognizer *recognizer = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(facesPro_longPressHeld:)] autorelease];
+			[self addGestureRecognizer:recognizer];
+		}
 		for (SBPasscodeNumberPadButton *numberButton in passcodeButtons) {
-			if (numberButton && [numberButton isKindOfClass:%c(SBPasscodeNumberPadButton)] && [numberButton respondsToSelector:@selector(revealingRingView)]) {
+			if (numberButton && [numberButton isKindOfClass:%c(SBPasscodeNumberPadButton)]) {
 				TPRevealingRingView *ringView = numberButton.revealingRingView;
 				CGRect frameForButtons = CGRectMake(ringView.paddingOutsideRing.left, ringView.paddingOutsideRing.top, ringView.ringSize.width, ringView.ringSize.height);
+
 				UIImage *imageForButton = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Faces/picture%@.png", [numberButton stringCharacter]]];
 
 				UIView *colorView = [[UIView alloc] init];
