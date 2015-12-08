@@ -208,7 +208,7 @@
 - (void)passcodeButtonShouldAddContact:(SBPasscodeNumberPadButton *)button {
     _selectedNumberPadButton = button;
 
-    ABPeoplePickerNavigationController *contactPicker = [[ABPeoplePickerNavigationController alloc] init];
+    CNContactPickerViewController *contactPicker = [[ABPeoplePickerNavigationController alloc] init];
     contactPicker.displayedProperties = @[@(kABPersonPhoneProperty)];
     contactPicker.peoplePickerDelegate = self;
 

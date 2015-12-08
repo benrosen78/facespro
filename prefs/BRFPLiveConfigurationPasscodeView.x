@@ -29,8 +29,9 @@
 
 - (void)passcodeLockNumberPad:(SBUIPasscodeLockNumberPad *)numberPad keyUp:(SBPasscodeNumberPadButton *)passcodeButton {
 	_selectedButton = passcodeButton;
+	NSString *buttonKey = [@"Button-" stringByAppendingString:[_selectedButton stringCharacter]];
 
-	UIAlertController *optionsAlert = [UIAlertController alertControllerWithTitle:@"Faces Pro" message:[NSString stringWithFormat:@"You selected button %@. What would you like to do to this button?", passcodeButton.stringCharacter] preferredStyle:UIAlertControllerStyleActionSheet];
+	UIAlertController *optionsAlert = [UIAlertController alertControllerWithTitle:@"Faces Pro" message:[NSString stringWithFormat:@"You selected button %@.%@ What would you like to do to this button?", passcodeButton.stringCharacter, [self stringForCurrentContactState]] preferredStyle:UIAlertControllerStyleActionSheet];
 	optionsAlert.popoverPresentationController.sourceView = passcodeButton;
 
 	[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Set an individual background tint color" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -56,6 +57,18 @@
 	if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"/var/mobile/Library/Faces/picture%@.png", [passcodeButton stringCharacter]]]) {
 		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Delete current photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 			[self passcodeButtonShouldDeleteImage];
+		}]];
+	}
+
+	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
+		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Select a new contact" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+			[self showContactPicker];
+		}]];
+	}
+
+	if (_preferences[buttonKey][@"ContactProperty"]) {
+		[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Remove contact" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+			[self removeCurrentContact];
 		}]];
 	}
 
@@ -231,6 +244,64 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
 	[picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - contact selecting
+
+- (NSString *)stringForCurrentContactState {
+	NSString *buttonKey = [@"Button-" stringByAppendingString:[_selectedButton stringCharacter]];
+	if (!_preferences[buttonKey][@"ContactProperty"]) {
+		return @"";
+
+	}
+	CNContactProperty *property = [NSKeyedUnarchiver unarchiveObjectWithData:_preferences[buttonKey][@"ContactProperty"]];
+	if (!property) {
+		return @"";
+	}
+	NSString *phoneNumber = ((CNPhoneNumber *)property.value).stringValue;
+	if (!phoneNumber) {
+		return @"";
+	}
+	NSString *name = property.contact.givenName;
+	if (!name) {
+		return @"";
+	}
+	return [NSString stringWithFormat:@" The contact is currently set to %@, and the current phone number is %@.", name, phoneNumber];
+}
+
+- (void)showContactPicker {
+	CNContactPickerViewController *contactPicker = [[CNContactPickerViewController alloc] init];
+	contactPicker.displayedPropertyKeys = @[CNContactPhoneNumbersKey];
+	contactPicker.delegate = self;
+	contactPicker.predicateForSelectionOfContact = [NSPredicate predicateWithValue:NO];
+	contactPicker.predicateForSelectionOfProperty = [NSPredicate predicateWithValue:YES];
+
+	[((PreferencesAppController *)[UIApplication sharedApplication]).rootController presentViewController:contactPicker animated:YES completion:nil];
+}
+
+- (void)removeCurrentContact {
+	NSString *buttonKey = [@"Button-" stringByAppendingString:[_selectedButton stringCharacter]];
+	NSMutableDictionary *selectedNumberCopy = [_preferences[buttonKey] mutableCopy];
+	[selectedNumberCopy removeObjectForKey:@"ContactProperty"];
+	_preferences[buttonKey] = selectedNumberCopy;
+	[selectedNumberCopy release];
+	notify_post("me.benrosen.facespro/ReloadPrefs");
+}
+
+#pragma mark - contact picker controller delegate
+
+- (void)contactPickerDidCancel:(CNContactPickerViewController *)picker {
+	[picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)contactPicker:(CNContactPickerViewController *)picker didSelectContactProperty:(CNContactProperty *)contactProperty {
+	[picker dismissViewControllerAnimated:YES completion:nil];
+
+	NSString *buttonKey = [@"Button-" stringByAppendingString:[_selectedButton stringCharacter]];
+	NSMutableDictionary *selectedNumberCopy = [_preferences[buttonKey] mutableCopy] ?: [NSMutableDictionary dictionary];
+	selectedNumberCopy[@"ContactProperty"] = [NSKeyedArchiver archivedDataWithRootObject:contactProperty];
+	_preferences[buttonKey] = selectedNumberCopy;
+	[selectedNumberCopy release];
 }
 
 #pragma mark - memory management

@@ -35,11 +35,29 @@ static NSString *const kBRFPHidePasscodeButtonsKey = @"HidePasscodeButtons";
 }
 
 - (UIColor *)colorForPasscodeButtonString:(NSString *)string {
-	NSString *potentialIndividualTint = _preferences[string][@"Tint"];
+	NSString *buttonKey = [@"Button-" stringByAppendingString:string];
+	NSString *potentialIndividualTint = _preferences[buttonKey][@"Tint"];
 	if (potentialIndividualTint) {
 		return LCPParseColorString(potentialIndividualTint, @"#000000");
 	}
 	return _hexForAllButtons ? LCPParseColorString(_hexForAllButtons, @"#000000") : [UIColor clearColor];
+}
+
+- (NSString *)phoneNumberForPasscodeButtonString:(NSString *)string {
+	NSString *buttonKey = [@"Button-" stringByAppendingString:string];
+	if (!_preferences[buttonKey][@"ContactProperty"]) {
+		return nil;
+
+	}
+	CNContactProperty *property = [NSKeyedUnarchiver unarchiveObjectWithData:_preferences[buttonKey][@"ContactProperty"]];
+	if (!property) {
+		return nil;
+	}
+	NSString *phoneNumber = [((CNPhoneNumber *)property.value).stringValue stringByReplacingOccurrencesOfString:@" " withString:@""];
+	if (!phoneNumber) {
+		return nil;
+	}
+	return phoneNumber;
 }
 
 #pragma mark - Memory management

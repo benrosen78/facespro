@@ -56,10 +56,21 @@
 			}
 		}
 	}
-	UILongPressGestureRecognizer *recognizer = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(facesPro_longPressHeld:)] autorelease];
-	[self addGestureRecognizer:recognizer];
-
 	return self;
+}
+
+%new - (void)facesPro_longPressHeld:(UILongPressGestureRecognizer *)gestureRecognizer {
+	if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+		for (UIView *subview in self.subviews) {
+			if ([subview isKindOfClass:%c(SBPasscodeNumberPadButton)] && CGRectContainsPoint(subview.frame, [gestureRecognizer locationInView:self])) {
+				NSString *phoneNumber = [[BRFPPreferencesManager sharedInstance] phoneNumberForPasscodeButtonString:((SBPasscodeNumberPadButton *)subview).stringCharacter];
+				if (phoneNumber) {
+					[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:phoneNumber]]];
+				}
+				//[phoneNumber release];
+			}
+		}
+	}
 }
 
 %end
@@ -79,24 +90,6 @@
 }
 
 %end
-
-/*
-%new
-
-- (void)facesPro_longPressHeld:(UILongPressGestureRecognizer *)gestureRecognizer {
-	if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-		for (UIView *subview in self.subviews) {
-			if ([subview isKindOfClass:objc_getClass("SBPasscodeNumberPadButton")] && CGRectContainsPoint(subview.frame, [gestureRecognizer locationInView:self])) {
-				NSString *phoneNumber = [[FacesProSettingsManager sharedManager] phoneNumberForButtonString:((SBPasscodeNumberPadButton *)subview).stringCharacter];
-				if (phoneNumber && [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
-					[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:phoneNumber]]];
-				}
-				[phoneNumber release];
-			}
-		}
-	}
-}
-*/
 
 // epicentre
 /*

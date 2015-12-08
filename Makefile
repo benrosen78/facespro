@@ -2,7 +2,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = AFacesPro
 AFacesPro_FILES = Tweak.xm BRFPPreferencesManager.m UIImage+AverageColor.m
-AFacesPro_FRAMEWORKS = CoreGraphics AddressBook AddressBookUI Cephei
+AFacesPro_FRAMEWORKS = CoreGraphics Contacts AddressBookUI Cephei
 AFacesPro_EXTRA_FRAMEWORKS = Cephei
 AFacesPro_LIBRARIES = colorpicker
 

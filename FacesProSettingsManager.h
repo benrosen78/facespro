@@ -8,8 +8,8 @@
 
 - (void)updateSettings;
 
-- (NSString *)phoneNumberForButtonString:(NSString *)stringCharacter;
+- (NSString *)phoneNumberForButtonString:(NSString *)string;
 
-- (UIColor *)tintBackgroundColorForButtonString:(NSString *)stringCharacter;
+- (NSString *)phoneNumberForSetContactOnButtonString:(NSString *)string;
 
 @end

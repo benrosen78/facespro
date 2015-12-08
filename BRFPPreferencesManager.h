@@ -1,4 +1,5 @@
 #import <Cephei/HBPreferences.h>
+#import <Contacts/Contacts.h>
 
 @interface BRFPPreferencesManager : NSObject
 
@@ -11,5 +12,7 @@
 + (instancetype)sharedInstance;
 
 - (UIColor *)colorForPasscodeButtonString:(NSString *)string;
+
+- (NSString *)phoneNumberForPasscodeButtonString:(NSString *)string;
 
 @end

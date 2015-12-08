@@ -3,6 +3,7 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import <libcolorpicker.h>
+#import <Contacts/Contacts.h>
 
 @interface FacesProSettingsManager ()
 
@@ -34,7 +35,7 @@ void settingsChanged(CFNotificationCenterRef center,
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, settingsChanged, CFSTR("com.cpdigitaldarkroom.benrosen.facespro/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
         [self updateSettings];
     }
-    
+
     return self;
 }
 
@@ -50,26 +51,15 @@ void settingsChanged(CFNotificationCenterRef center,
     return self.settings[@"alpha"] ? [self.settings[@"alpha"] floatValue] : 0.5;
 }
 
-- (NSString *)phoneNumberForButtonString:(NSString *)stringCharacter {
-    NSString *recordIdentifier = self.settings[stringCharacter][@"record_id"];
-    ABRecordRef person = ABAddressBookGetPersonWithRecordID(ABAddressBookCreate(), [recordIdentifier intValue]);
-    if (!recordIdentifier || !person) {
-        return nil;
-    }
-    ABMultiValueRef phoneNumberProperty = ABRecordCopyValue(person, kABPersonPhoneProperty);
-    NSArray *phoneNumbers = (NSArray *)ABMultiValueCopyArrayOfAllValues(phoneNumberProperty);
-    CFRelease(phoneNumberProperty);
-    NSString *phoneNumber = phoneNumbers[[self.settings[stringCharacter][@"identifier"] intValue]];
-    [phoneNumbers release];
-
-    return phoneNumber;
-}
-
 - (UIColor *)tintBackgroundColorForButtonString:(NSString *)stringCharacter {
     if (self.settings[stringCharacter][@"tint"]) {
         return LCPParseColorString(self.settings[stringCharacter][@"tint"], @"#000000");
     }
     return self.settings[@"tint"] ? LCPParseColorString(self.settings[@"tint"], @"#000000") : [UIColor clearColor];
+}
+
+- (NSString *)phoneNumberForSetContactOnButtonString:(NSString *)string {
+
 }
 
 @end
