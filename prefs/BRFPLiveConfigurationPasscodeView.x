@@ -114,6 +114,13 @@
 
 	[optionsAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
 
+	UIPopoverPresentationController *popover = optionsAlert.popoverPresentationController;
+
+    if (popover) {
+        popover.barButtonItem = item;
+        popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    }
+
 	[((PreferencesAppController *)[UIApplication sharedApplication]).rootController presentViewController:optionsAlert animated:YES completion:nil];
 }
 
