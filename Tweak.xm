@@ -7,14 +7,13 @@
 #define FACES_BUTTON_TAG 19828
 #define FACES_COLOR_TAG 19829
 
+@interface SBNumberPadWithDelegate : TPNumberPad
+@end
+
 %hook TPNumberPad
 
 - (id)initWithButtons:(NSArray *)passcodeButtons {
 	if ((self = %orig) && [BRFPPreferencesManager sharedInstance].enabled) {
-		if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
-			UILongPressGestureRecognizer *recognizer = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(facesPro_longPressHeld:)] autorelease];
-			[self addGestureRecognizer:recognizer];
-		}
 		for (SBPasscodeNumberPadButton *numberButton in passcodeButtons) {
 			if (numberButton && [numberButton isKindOfClass:%c(SBPasscodeNumberPadButton)]) {
 				TPRevealingRingView *ringView = numberButton.revealingRingView;
@@ -51,20 +50,36 @@
 	return self;
 }
 
-%new - (void)facesPro_longPressHeld:(UILongPressGestureRecognizer *)gestureRecognizer {
+%end
+
+%hook SBNumberPadWithDelegate
+- (id)initWithButtons:(NSArray *)button {
+
+	if((self == %orig) && [BRFPPreferencesManager sharedInstance].enabled) {
+		if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
+			UILongPressGestureRecognizer *recognizer = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)] autorelease];
+			[self addGestureRecognizer:recognizer];
+		}
+	}
+	return self;
+}
+
+%new
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
 	if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
 		for (UIView *subview in self.subviews) {
-			if ([subview isKindOfClass:%c(SBPasscodeNumberPadButton)] && CGRectContainsPoint(subview.frame, [gestureRecognizer locationInView:self])) {
+			if ([subview isKindOfClass:NSClassFromString(@"SBPasscodeNumberPadButton")] && CGRectContainsPoint(subview.frame, [gestureRecognizer locationInView:self])) {
+
 				NSString *phoneNumber = [[BRFPPreferencesManager sharedInstance] phoneNumberForPasscodeButtonString:((SBPasscodeNumberPadButton *)subview).stringCharacter];
+				HBLogInfo(@"Phone Number: %@", phoneNumber);
 				if (phoneNumber) {
+					HBLogInfo(@"Handle Calling");
 					[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:phoneNumber]]];
 				}
-				//[phoneNumber release];
 			}
 		}
 	}
 }
-
 %end
 
 %hook SBPasscodeNumberPadButton
