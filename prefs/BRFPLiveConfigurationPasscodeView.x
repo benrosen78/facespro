@@ -194,9 +194,11 @@
 - (void)setAllButtonsBackgroundColorToColor:(UIColor *)color {
 	[UIView animateWithDuration:2 animations:^{
 		for (SBPasscodeNumberPadButton *button in self._numberPad.buttons) {
-			NSString *buttonKey = [@"Button-" stringByAppendingString:[button stringCharacter]];
-			if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)] && !_preferences[buttonKey][@"Tint"]) {
-				[self setButton:button toIndividualColor:color];
+			if(![button isKindOfClass:%c(SBEmptyButtonView)]) {
+				NSString *buttonKey = [@"Button-" stringByAppendingString:[button stringCharacter]];
+				if ([button isKindOfClass:%c(SBPasscodeNumberPadButton)] && !_preferences[buttonKey][@"Tint"]) {
+					[self setButton:button toIndividualColor:color];
+				}
 			}
 		}
 	}];
