@@ -1,5 +1,4 @@
-THEOS_DEVICE_IP=192.168.0.11
-THEOS_DEVICE_PORT=22
+FOR_RELEASE = 1
 
 include $(THEOS)/makefiles/common.mk
 
