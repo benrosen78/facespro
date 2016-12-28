@@ -56,7 +56,7 @@
 		</dict>
 		<dict>
 			<key>action</key>
-			<string>hb_sendSupportEmail</string>
+			<string>sendSupportEmail</string>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>icon</key>

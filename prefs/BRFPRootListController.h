@@ -1,5 +1,5 @@
 #import <CepheiPrefs/HBRootListController.h>
 
-@interface BRFPRootListController : HBRootListController
+@interface BRFPRootListController : HBRootListController <MFMailComposeViewControllerDelegate>
 
 @end
