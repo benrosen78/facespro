@@ -3,7 +3,7 @@ include $(THEOS)/makefiles/common.mk
 BUNDLE_NAME = FacesPro
 FacesPro_FILES = $(wildcard *.m) $(wildcard *.x)
 FacesPro_INSTALL_PATH = /Library/PreferenceBundles
-FacesPro_FRAMEWORKS = UIKit ContactsUI
+FacesPro_FRAMEWORKS = UIKit ContactsUI MessageUI
 FacesPro_PRIVATE_FRAMEWORKS = Preferences AppSupport SpringBoardUIServices
 FacesPro_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
 FacesPro_LIBRARIES = MobileGestalt colorpicker

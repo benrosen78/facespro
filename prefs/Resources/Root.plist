@@ -42,6 +42,7 @@
 			<key>label</key>
 			<string>Configuration</string>
 		</dict>
+		<!--
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
@@ -54,6 +55,7 @@
 			<key>label</key>
 			<string>About</string>
 		</dict>
+		-->
 		<dict>
 			<key>action</key>
 			<string>sendSupportEmail</string>
