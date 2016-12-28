@@ -1,4 +1,4 @@
-Package: me.benrosen.facespro
+Package: com.cpdigitaldarkroom.benrosen.facespro
 Name: Faces Pro
 Depends: mobilesubstrate, org.thebigboss.libcolorpicker (>= 1.3), ws.hbang.common (>= 1.6)
 Version: 1.0

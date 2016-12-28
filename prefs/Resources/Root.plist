@@ -55,16 +55,14 @@
 			<string>About</string>
 		</dict>
 		<dict>
+			<key>action</key>
+			<string>hb_sendSupportEmail</string>
 			<key>cell</key>
 			<string>PSLinkCell</string>
-			<key>isController</key>
-			<true/>
 			<key>icon</key>
 			<string>support.png</string>
 			<key>label</key>
 			<string>Support</string>
-			<key>action</key>
-			<string>showSupportEmailController</string>
 		</dict>
 	</array>
 	<key>title</key>

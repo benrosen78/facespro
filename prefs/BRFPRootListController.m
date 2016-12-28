@@ -2,6 +2,8 @@
 #import "../UIImage+AverageColor.h"
 #import <UIKit/UIImage+Private.h>
 
+#define LOCALIZE(key, table, comment) NSLocalizedStringFromTableInBundle(key, table ?: @"Localizable", [NSBundle bundleForClass:self.class], comment)
+
 @implementation BRFPRootListController
 
 + (NSString *)hb_specifierPlist {
